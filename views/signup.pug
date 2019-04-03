@@ -13,12 +13,23 @@ html(lang="en")
     link(rel='stylesheet', type='text/css', href='style.css')
     link(href='https://fonts.googleapis.com/css?family=Open+Sans:300', rel='stylesheet', type='text/css')
   body
-     form(id="tab_form" )
-       p= title
-       p= message
-       button.btn.btn-primary(class="button" href="/rentee" locaton.href="/rentee") Sign up 
-       a(class='button' href='/signup') Sign Up
-       a(class='button' href='/signin') Sign In
+     form(method='POST' id="tab_form" action='/api/signup')
+       div.form-group
+          label(for='firstname') First Name:
+          input#name.form-control(type='text', placeholder='first' name='firstname')
+       div.form-group
+          label(for='lastname') Last Name:
+          input#name.form-control(type='text', placeholder='last' name='lastname')
+       div.form-group
+            label(for='email') Email:
+            input#email.form-control(type='email', placeholder='name@email.com' name='email')
+       div.form-group
+          label(for='password') Password:
+          input#pw.form-control(type='password' name='password')
+       button.btn.btn-primary(type='submit') Sign up
+
+
+//  <script src="w3multiform.js"></script>
 //    .container
 //      fieldset
 //       form(action='/', method='post')
