@@ -1,0 +1,38 @@
+save each step as projstep#
+
+
+0. start
+1. enter questions (1 hour)
+
+rentee
+  -zipcode, max distance
+  -age  
+  -lifestyle conservative to liberal, 1 to 5
+  -price   pricemin, pricemax
+  -gendor / requirments, gendor, gendorpref 0=does not matter m, 1=same
+
+rentor:
+  -zipcode, loc_description
+  -age  agemin, agemax default 18-100
+  -lifestyle conservative to liberal, 1 to 5
+  -minprice   
+  -gendor / requirments, gendor, gendorpref 0=does not matter m, 1=same
+  
+2. finish query (1 hr)
+   ziprange: already taken care of
+   life_text= "same as yours" "slightly more conservative, you might have to constrain your behavior 
+               slightly more liberal you might have to put up... or same, slightly liberal
+
+
+3. grid output (1 hr)
+   name, distance, lifestyle(-1 to 1) w desc, price, email
+   TB!
+4. cleanup (1 hr)
+   -add "rockstars" with good (edited) zipcodes
+5. put text on extra screens, clean up screens (1 hr)
+6. powerpoint (2 hr)
+
+6.1 better picuture, initial screen
+6.5 city lookup
+7. picture?
+8. validation

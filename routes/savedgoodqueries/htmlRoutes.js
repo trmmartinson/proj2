@@ -3,7 +3,6 @@ var rentor = require("../views/rentor");
 var rentee = require("../views/rentee");
 var sequelize = require("sequelize");
 var path = require('path');
-var util = require('util');
 var cow;
 var pig;
 
@@ -15,13 +14,13 @@ module.exports = function (app, passport) {
     console.log("htmlroutes get root");
     res.render('index', { pretty: true, title: 'Hey', message: 'Hello there!' })
   })
-  app.get('/choices', isLoggedIn, function (req, res) {
+  app.get('/dashboard', isLoggedIn, function (req, res) {
     console.log("you are logged in");
-    res.render('choices');
+    res.render('rentor', { pretty: true, mycode: rentee.mycode })
     //res.render('index', { pretty: true, title: 'Hey', message: 'Hello there!' })
   })
 
-  app.get('/matchesold', function (req, res) {
+  app.get('/matches', function (req, res) {
     var the_user;
     var zip_list;
     var rentor_answers = "scope";
@@ -87,89 +86,26 @@ module.exports = function (app, passport) {
     res.render('index', { pretty: true, title: 'Hey', message: 'Hello there!' })
   })
 
-  app.get('/signup', function (req, res) {
-    res.render('signup', { pretty: true, title: 'Hey', message: 'Hello there!' })
-  })
-  app.get('/signin', function (req, res) {
-    res.render('signin', { pretty: true, title: 'Hey', message: 'Hello there!' })
-  })
 
-  app.get('/successful', function (req, res) {
-    res.render('successful', { pretty: true, title: 'Hey', message: 'Hello there!' })
+  app.get('/success', function (req, res) {
+    res.render('index', { pretty: true, title: 'Hey', message: 'Hello there!' })
   })
-  app.get('/matches',isLoggedIn, function (req, res) {
+  app.get('/test',isLoggedIn, function (req, res) {
     //select answers.answer from answers where question_code = "radius" and user_id = 129;
-    console.log("/test(html)" + req.user.id);
+
     db.answer.findOne({
       where: {
-        user_id: req.user.id,
+        user_id: req.user.user_id,
         question_code: "radius"
       }
-    }).then(function (dbrentee) { 
-      let mysql = require('mysql2');
-      //let config = require('./config.js');
-      let locconfig = {
-        host    : 'localhost',
-        user    : 'root',
-        password: 'test',
-        database: 'rentdb'
-      };
-      
- 
-      let connectioncall = mysql.createConnection(locconfig);
- 
-      //let sql = `CALL searcher(555,329)`;
-      let sql_s = "call searcher(" + dbrentee.answer + "," + req.user.id + ");";
-      console.log("sql_s =" + sql_s);
-
-      connectioncall.query(sql_s, true, (error, results, fields) => {
-        if (error) {
-          return console.error(error.message);
-        }
-        console.log(results[0]);
-        var tabledata = JSON.stringify(results);
-             console.log("tabledata is:");
-             console.log(tabledata);
-             var foo = JSON.stringify(results);
-             var tr = JSON.stringify(results.TextRow);
-             console.log("foo");
-             console.log(foo);
-             console.log("----tr:");
-             console.log(tr);
-             foo = JSON.stringify(results[0]);
-             res.render('matches', { pretty: true, title: 'Hey', message: foo })
-             connectioncall.close();
-      });
-
-      
-    }); 
-    
-    /*
-    
-      {
-      console.log("mathces, id:" + req.user.id  + " radius:" + dbrentee.answer)
+    }).then(function (dbrentee) {
       db.sequelize
-        .query('CALL searcher (:radius, :theid)',
-          { replacements: { radius: parseInt(dbrentee.answer),theid: parseInt(req.user.id), } })
-        .then(function (thedata) {
-             console.log("----thedata:");
-             console.log(thedata);
-             console.log("----textrow:");
-             console.log(dbrentee.TextRow);
-             //for grid start with city, miles
+        .query('CALL go (:radius)',
+          { replacements: { radius: parseInt(dbrentee.answer), } })
+        .then(v => console.log(v));
 
-             var tabledata = JSON.stringify(thedata);
-             console.log("tabledata is:");
-             console.log(tabledata);
-             var foo = JSON.stringify(tabledata);
-
-             res.render('matches', { pretty: true, title: 'Hey', message: foo })
-
-        });
-    })  */
-
-
-
+      res.render('index', { pretty: true, title: 'Hey', message: 'Hello there!' })
+    })
   });
 
 
@@ -181,15 +117,14 @@ module.exports = function (app, passport) {
   })
 
   app.get('/rentee', function (req, res) {
-    console.log("htmlroutes get this is the rentee screen!");
+    console.log("htmlroutes get rentor");
     //console.log('mycode' + rentor.mycode)
     res.render('rentor', { pretty: true, mycode: rentee.mycode })
   })
-  /* del jun
   app.get('/signin', function (req, res) {
     console.log("htmlrouts get signin");
     res.sendFile(path.join(__dirname + "/signin.html"));
-  }) */
+  })
 
 
   /*  app.get("/", function(req, res) {
@@ -221,13 +156,13 @@ module.exports = function (app, passport) {
   function isLoggedIn(req, res, next) {
     console.log("isauth---------------------" + req.isAuthenticated());
     if (req.isAuthenticated()) {
-      console.log("yutyut html:" + util.inspect(req.user.firstname + req.user.lastname + "   id:" + req.user.id ));
-      console.log("ystringa html:" + JSON.stringify(res.session));
+      console.log("yutyut:" + util.inspect(req.user.firstname + req.user.lastname));
+      console.log("ystring:" + JSON.stringify(res.session));
 
       return next();
     }
 
-    res.redirect('/signinloginfail');
+    res.redirect('/signin');
   }
 
 };

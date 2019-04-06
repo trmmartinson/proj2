@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--style-->
+    <!-- include style.css-->
+    <meta charset="utf-8">
+    <title>Roominator</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.5.1/css/tabulator.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div id="example-table-sorting"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tabulator/3.5.1/js/tabulator.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css"><div></div>
+    <script>
+      var tablestring="[{\"user_id\":230,\"ranswer\":\"100\",\"city\":\"Test\",\"miles\":49,\"newcol\":\"nerf\",\"values_level\":-2},{\"user_id\":246,\"ranswer\":\"55423\",\"city\":\"Minneapolis\",\"miles\":0,\"newcol\":\"nerf\",\"values_level\":-2},{\"user_id\":248,\"ranswer\":\"55423\",\"city\":\"Minneapolis\",\"miles\":0,\"newcol\":\"nerf\",\"values_level\":-2}]";
+      var tablefix  = tablestring.replace(/&quot;/g,'"');
+      var tabledata= JSON.parse(tablefix);
+      console.log("1:");
+      console.log(tablestring);
+      console.log("2:");
+      console.log(tablefix);
+      console.log("3:");
+      console.log(tabledata);
+      console.log("--------------------------------parsed");
+      ("#example-table-sorting").tabulator({
+      columns:[
+      {title:"Name", field:"city", width:200},
+      {title:"Progress", field:"progress", align:"right"},
+      {title:"Gender", field:"gender", sorter:"string"},
+      {title:"Rating", field:"rating",  align:"center", width:100},
+      {title:"Favourite Color", field:"col", sortable:false, sorter:function(a,b){
+      return String(a).toLowerCase().localeCompare(String(b).toLowerCase());
+      }},
+      {title:"Date Of Birth", field:"dob", sorter:"date", align:"center"},
+      {title:"Driver", field:"car", align:"center", sorter:"boolean"},
+      ],
+      height: "100%",
+      width: "50%",
+      pagination:"local",
+      paginationSize:11,
+      layout:"fitColumns",
+      responsiveLayout:true,
+      });
+      $("#example-table-sorting").tabulator("setData", tabledata);
+    </script>
+  </body>
+</html>

@@ -31,15 +31,15 @@ declare rentor_age_min INT;
 declare rentor_age_max INT;
 declare rentor_price_min INT;
 declare rentor_price_max INT;
-declare rentor_loc_description char(80); 
+declare rentor_loc_description char(40); 
 declare rentor_price INT;
 declare rentor_gender char(10); 
 declare rentor_gender_opt char(10);  
 declare rentor_values_level INT;
 
-declare out_values char(80);
-declare out_first char(80);
-declare out_email char(80);
+declare out_values char(30);
+declare out_first char(30);
+declare out_email char(30);
 
  
 
@@ -77,10 +77,10 @@ CREATE TEMPORARY TABLE rentors AS
 
 select ranswers.user_id, ranswers.answer as "ranswer",uszips.city,
      round(69*haversine(uszips.lat,uszips.lng, zip2.lat, zip2.lng),0) AS miles,
-      "loc                                                          " as loc_desc, 
-      "val                                                   " as values_level,
-      "fir                                       " as first_name,
-      "email                                     " as email
+      "                                            " as loc_desc, 
+      "                                " as values_level,
+      "              " as first_name,
+      "                               " as email
  from uszips, uszips as zip2,  answers, answers as ranswers
  where ranswers.user_id > 305 and 
    uszips.zip = ranswers.answer 
