@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password":  "",
+    "password":  "notused",
     "database": "rentdb",
     "host": "localhost",
     "dialect": "mysql"
