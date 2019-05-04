@@ -1,5 +1,6 @@
 
 module.exports = class multi_form {
+    // the html/css behind this code is from w3schools
     constructor(form_id, title, action,method) {
         this.form_id = form_id;
         this.title = title;
@@ -14,7 +15,6 @@ module.exports = class multi_form {
     }
     show() {
         console.log(this.tab_content.length);
-        console.log("rut:" + this.tab_content);
     }
     gen_html() {
         let html_s = `
@@ -45,18 +45,6 @@ module.exports = class multi_form {
         }
         html_s = html_s + `</div>`;
         html_s = html_s + `</form>`;
-//        html_s = html_s + '<script src="w3multiform.js"></script>';
         return html_s;
     }
 }
-
-//var doy = new multi_form("formid", "the title", "/api/roomor");
-//doy.add_tab("title1", `   
-    //<p><input placeholder="First name..." oninput="this.className = ''" name="fname1"></p>
-    //<p><input placeholder="Last name..." oninput="this.className = ''" name="lname1"></p>`); 
-//doy.add_tab("title2", `  
-     //<p><input placeholder="First name..." oninput="this.className = ''" name="fname2"></p>
-     //<p><input placeholder="Last name..." oninput="this.className = ''" name="lname2"></p>`); 
-//doy.add_tab("title3", `    <p><input placeholder="First name..." oninput="this.className = ''" name="fname3"></p>
-     //<p><input placeholder="Last name..." oninput="this.className = ''" name="lnamee"></p>`); 
-//console.log(doy.gen_html());

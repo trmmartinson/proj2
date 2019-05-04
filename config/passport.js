@@ -1,141 +1,108 @@
-console.log("in config/passport ");
-  //load bcrypt
-  var bCrypt = require('bcrypt-nodejs');
+//load bcrypt
+var bCrypt = require("bcrypt-nodejs");
 
-  module.exports = function(passport,user){
-
+module.exports = function(passport, user) {
   var User = user;
-  var LocalStrategy = require('passport-local').Strategy;
+  var LocalStrategy = require("passport-local").Strategy;
 
 
   passport.serializeUser(function(user, done) {
-          done(null, user.id);
-      });
-
+    done(null, user.id);
+  });
 
   // used to deserialize the user
   passport.deserializeUser(function(id, done) {
-///      User.findById(id).then(function(user) {
-       User.findOne({ where : { id : id}}).then(function (user) {
-        if(user){
-          done(null, user.get());
-        }
-        else{
-          done(user.errors,null);
-        }
-      });
-
+    ///      User.findById(id).then(function(user) {
+    User.findOne({ where: { id: id } }).then(function(user) {
+      if (user) {
+        done(null, user.get());
+      } else {
+        done(user.errors, null);
+      }
+    });
   });
 
-
-  passport.use('local-signup', new LocalStrategy(
-    {           
-      usernameField : 'email',
-      passwordField : 'password',
-      passReqToCallback : true // allows us to pass back the entire request to the callback
-    },
-
-    function(req, email, password, done){
-       
-
-      var generateHash = function(password) {
-      return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
-      };
-
-       User.findOne({where: {email:email}}).then(function(user){
-
-      if(user)
+  passport.use(
+    "local-signup",
+    new LocalStrategy(
       {
-        return done(null, false, {message : 'That email is already taken'} );
-      }
+        usernameField: "email",
+        passwordField: "password",
+        passReqToCallback: true // allows us to pass back the entire request to the callback
+      },
 
-      else
-      {
-        var userPassword = generateHash(password);
-        console.log("kelp forrest nerf");
-        var data =
-        { email:email,
-        password:userPassword,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname
-
+      function(req, email, password, done) {
+        var generateHash = function(password) {
+          return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
         };
-        console.log("emailsis" + data.email);
-        console.log("firstnameis" + data.firstname);
 
+        User.findOne({ where: { email: email } }).then(function(user) {
+          if (user) {
+            return done(null, false, {
+              message: "That email is already taken"
+            });
+          } else {
+            var userPassword = generateHash(password);
+            var data = {
+              email: email,
+              password: userPassword,
+              firstname: req.body.firstname,
+              lastname: req.body.lastname
+            };
 
-        User.create(data).then(function(newUser,created){
-          if(!newUser){
-            return done(null,false);
+            User.create(data).then(function(newUser, created) {
+              if (!newUser) {
+                return done(null, false);
+              }
+
+              if (newUser) {
+                return done(null, newUser);
+              }
+            });
           }
-
-          if(newUser){
-            console.log("canyouseethis????????????? " + JSON.stringify(req.body));
-            return done(null,newUser);
-            
-          }
-
-
         });
       }
+    )
+  );
 
-
-    }); 
-
-
-
-  }
-
-
-
-  ));
-    
   //LOCAL SIGNIN
-  passport.use('local-signin', new LocalStrategy(
-    
-  {
+  passport.use("local-signin", new LocalStrategy(
+      {
+        // by default, local strategy uses username and password, we will override with email
+        usernameField: "email",
+        passwordField: "password",
+        passReqToCallback: true // allows us to pass back the entire request to the callback
+      },
 
-  // by default, local strategy uses username and password, we will override with email
-  usernameField : 'email',
-  passwordField : 'password',
-  passReqToCallback : true // allows us to pass back the entire request to the callback
-  },
+      function(req, email, password, done) {
+        var User = user;
 
-  function(req, email, password, done) {
+        var isValidPassword = function(userpass, password) {
+          return bCrypt.compareSync(password, userpass);
+        };;
 
-    var User = user;
+        User.findOne({ where: { email: email } })
+          .then(function(user) {
+            if (!user) {
+              return done(null, false, { message: "Email does not exist" });
+            }
 
-    var isValidPassword = function(userpass,password){
-      return bCrypt.compareSync(password, userpass);
-    }
+            if (!isValidPassword(user.password, password)) {
+              return done(null, false, { message: "Incorrect password." });
+            }
 
-    User.findOne({ where : { email: email}}).then(function (user) {
+            var userinfo = user.get();
 
-      if (!user) {
-        return done(null, false, { message: 'Email does not exist' });
+            return done(null, userinfo);
+          })
+          .catch(function(err) {
+            console.log("Error:", err);
+
+            return done(null, false, {
+              message: "Something went wrong with your Signin"
+            });
+          });
       }
-
-      if (!isValidPassword(user.password,password)) {
-
-        return done(null, false, { message: 'Incorrect password.' });
-
-      }
-
-      var userinfo = user.get();
-
-      return done(null,userinfo);
-
-    }).catch(function(err){
-
-      console.log("Error:",err);
-
-      return done(null, false, { message: 'Something went wrong with your Signin' });
-
-
-    });
-
-  }
-  ));
-
-  }
-
+    )
+  );
+};;

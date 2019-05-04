@@ -77,7 +77,7 @@ CREATE TEMPORARY TABLE rentors AS
 
 select ranswers.user_id, ranswers.answer as "ranswer",uszips.city,
      round(69*haversine(uszips.lat,uszips.lng, zip2.lat, zip2.lng),0) AS miles,
-      "loc                                                          " as loc_desc, 
+      "loc                                                        " as loc_desc, 
       "val                                                   " as values_level,
       "fir                                       " as first_name,
       "email                                     " as email
