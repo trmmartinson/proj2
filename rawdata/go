@@ -1,3 +1,0 @@
-mmysql < go.sql;
-echo "TEST:"
-mmysql < test.sql;

@@ -7,9 +7,22 @@ var basename = path.basename(module.filename);
 var env = process.env.NODE_ENV || "development";
 var config = require(__dirname + "/../config/config.json")[env];
 var db = {};
-
+config.dialect = "mysql";
 if (process.env.NODE_ENV = "development") {
+  config.host = "localhost";
+  config.username = "root";
+  config.database = "rentdb"; 
   config.password = process.env.LOCAL_PASSWORD;
+}
+else
+{
+   config.host = process.env.HERO_HOST;
+   config.username = process.env.HERO_USERNAME;
+   config.password = process.env.HERO_PASSWORD;
+   config.host = process.env.HERO_HOST;
+   config.database = process.env.HERO_DATABASE;
+   config.port = process.env.HERO_PORT;
+   
 }
 
 if (config.use_env_variable) {
