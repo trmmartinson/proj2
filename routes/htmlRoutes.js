@@ -11,7 +11,10 @@ module.exports = function (app, passport) {
     res.render('index', { pretty: true, title: 'Hey', message: 'Hello there!' })
   })
   app.get('/choices', isLoggedIn, function (req, res) {
-    res.render('choices');
+    var msg = "Welcome!  " + req.user.firstname + " " + req.user.lastname;
+    console.log(msg);
+    //const compiledFunction = pug.compileFile('choices.pug');
+    res.render('choices', { "welcome" : msg, "two": "two" });
   })
 
   app.get('/matches', isLoggedIn, function (req, res) {
